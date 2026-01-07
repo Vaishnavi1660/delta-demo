@@ -25,11 +25,6 @@ const userRouter=require("./routes/user.js");
 
 const dbUrl=process.env.ATLASDB_URL;
 
-if (!dbUrl) {
-    throw new Error("❌ ATLASDB_URL is not defined");
-}
-
-
 main()
 .then(()=>{
     console.log("connected to db");
@@ -50,7 +45,7 @@ app.use(methodOverride("._method"));
 app.engine("ejs",ejsMate);
 app.use(express.static(path.join(__dirname,"/public")));
 
-const store=MongoStore.create({
+const store=mongoose.connection.getClient({
     mongoUrl:dbUrl,
     crypto:{
         secret:process.env.SECRET
