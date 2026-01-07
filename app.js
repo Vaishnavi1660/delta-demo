@@ -45,13 +45,22 @@ app.use(methodOverride("._method"));
 app.engine("ejs",ejsMate);
 app.use(express.static(path.join(__dirname,"/public")));
 
-const store=mongoose.connection.getClient({
-    mongoUrl:dbUrl,
-    crypto:{
-        secret:process.env.SECRET
-    },
-    touchAfter:24*3600,
-});
+// const store=mongoose.connection.getClient({
+//     mongoUrl:dbUrl,
+//     crypto:{
+//         secret:process.env.SECRET
+//     },
+//     touchAfter:24*3600,
+// });
+
+   const store = MongoStore.create({
+        client: mongoose.connection.getClient(),
+        mongoUrl:dbUrl,
+        crypto: {
+            secret: process.env.SECRET,
+        },
+        touchAfter: 24 * 3600,
+    });
 
 // store.on("error",()=>{
 //     console.log("ERROR IN MONGO SESSION STORE",err);
