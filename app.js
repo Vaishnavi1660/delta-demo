@@ -4,6 +4,9 @@ if(process.env.NODE_ENV!="production"){
 
 const express=require("express");
 const app=express();
+app.locals.currUser = null;
+app.locals.success = [];
+app.locals.error = [];
 const mongoose=require("mongoose");
 const path=require("path");
 const methodOverride=require("method-override");
@@ -50,8 +53,12 @@ const store=MongoStore.create({
     touchAfter:24*3600,
 });
 
-store.on("error",()=>{
-    console.log("ERROR IN MONGO SESSION STORE",err);
+// store.on("error",()=>{
+//     console.log("ERROR IN MONGO SESSION STORE",err);
+// });
+
+store.on("error", (err) => {
+    console.log("ERROR IN MONGO SESSION STORE", err);
 });
 
 
@@ -86,7 +93,7 @@ passport.deserializeUser(User.deserializeUser());
 app.use((req,res,next)=>{
     res.locals.success=req.flash("success");
     res.locals.error=req.flash("error");
-    res.locals.currUser=req.user || null;
+    res.locals.currUser=req.user ;
     next();
 });
 

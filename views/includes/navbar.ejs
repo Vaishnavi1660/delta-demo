@@ -42,7 +42,8 @@
         <% if(!currUser) { %>
         <a class="nav-link "  href="/signup"><b>Sign up</b></a>
         <a class="nav-link" href="/login"><b>Log in</b></a>
-        <% }  else { %>
+        <% } %>
+        <% if (currUser){ %>
         <a class="nav-link" href="/logout"><b>Log out</b></a>
         <% } %>
       </div>
