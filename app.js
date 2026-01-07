@@ -4,9 +4,9 @@ if(process.env.NODE_ENV!="production"){
 
 const express=require("express");
 const app=express();
-app.locals.currUser = null;
-app.locals.success = [];
-app.locals.error = [];
+// app.locals.currUser = null;
+// app.locals.success = [];
+// app.locals.error = [];
 const mongoose=require("mongoose");
 const path=require("path");
 const methodOverride=require("method-override");
@@ -45,31 +45,17 @@ app.use(methodOverride("._method"));
 app.engine("ejs",ejsMate);
 app.use(express.static(path.join(__dirname,"/public")));
 
-// const store=mongoose.connection.getClient({
-//     mongoUrl:dbUrl,
-//     crypto:{
-//         secret:process.env.SECRET
-//     },
-//     touchAfter:24*3600,
-// });
-
-   const store = MongoStore.create({
-        client: mongoose.connection.getClient(),
-        mongoUrl:dbUrl,
-        crypto: {
-            secret: process.env.SECRET,
-        },
-        touchAfter: 24 * 3600,
-    });
-
-// store.on("error",()=>{
-//     console.log("ERROR IN MONGO SESSION STORE",err);
-// });
-
-store.on("error", (err) => {
-    console.log("ERROR IN MONGO SESSION STORE", err);
+const store=MongoStore.create({
+    mongoUrl:dbUrl,
+    crypto:{
+        secret:process.env.SECRET
+    },
+    touchAfter:24*3600,
 });
 
+store.on("error",()=>{
+    console.log("ERROR IN MONGO SESSION STORE",err);
+});
 
 const sessionOptions={
     store,
@@ -82,12 +68,6 @@ const sessionOptions={
         httpOnly:true,
     },
 };
-
-// app.get("/",(req,res)=>{
-//     res.send("Hii,I am root");
-// });
-
-
 
 app.use(session(sessionOptions));
 app.use(flash());
