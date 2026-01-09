@@ -15,7 +15,7 @@ module.exports.signup=async(req,res)=>{
             return next(err);
         }
         req.flash("success","Welcome to Wanderlust!");
-    res.redirect("/listings");
+        res.redirect("/listings");
     })
     }
     catch(e){
@@ -34,7 +34,7 @@ module.exports.login=async(req,res)=>{
     res.redirect(redirectUrl);
 };
 
-module.exports.logout=(req,res,next)=>{
+module.exports.logout=(req,res)=>{
     req.logout((err)=>{
         if(err){
             next(err);
@@ -43,3 +43,4 @@ module.exports.logout=(req,res,next)=>{
         res.redirect("/listings");
     })
 };
+

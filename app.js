@@ -4,9 +4,6 @@ if(process.env.NODE_ENV!="production"){
 
 const express=require("express");
 const app=express();
-// app.locals.currUser = null;
-// app.locals.success = [];
-// app.locals.error = [];
 const mongoose=require("mongoose");
 const path=require("path");
 const methodOverride=require("method-override");
@@ -24,6 +21,7 @@ const reviewRouter=require("./routes/review.js");
 const userRouter=require("./routes/user.js");
 
 const dbUrl=process.env.ATLASDB_URL;
+const secret = process.env.SECRET
 
 main()
 .then(()=>{
@@ -45,21 +43,21 @@ app.use(methodOverride("._method"));
 app.engine("ejs",ejsMate);
 app.use(express.static(path.join(__dirname,"/public")));
 
-const store=MongoStore.create({
-    mongoUrl:dbUrl,
-    crypto:{
-        secret:process.env.SECRET
-    },
-    touchAfter:24*3600,
-});
+// const store=MongoStore.create({
+//     mongoUrl:dbUrl,
+//     crypto:{
+//         secret:secret
+//     },
+//     touchAfter:24*3600,
+// });
 
-store.on("error",()=>{
-    console.log("ERROR IN MONGO SESSION STORE",err);
-});
+// store.on("error",()=>{
+//     console.log("ERROR IN MONGO SESSION STORE",err);
+// });
 
 const sessionOptions={
-    store,
-    secret:process.env.SECRET,
+    //  store,
+    secret:secret,
     resave:false,
     saveUninitialized:true,
     cookie:{
