@@ -43,20 +43,21 @@ app.use(methodOverride("._method"));
 app.engine("ejs",ejsMate);
 app.use(express.static(path.join(__dirname,"/public")));
 
-// const store=MongoStore.create({
-//     mongoUrl:dbUrl,
-//     crypto:{
-//         secret:secret
-//     },
-//     touchAfter:24*3600,
-// });
+const store=MongoStore.create({
+    mongoUrl:dbUrl,
+    crypto:{
+        secret:secret
+    },
+    touchAfter:24*3600,
+});
 
-// store.on("error",()=>{
-//     console.log("ERROR IN MONGO SESSION STORE",err);
-// });
+store.on("error", (err) => {
+    console.log("ERROR IN MONGO SESSION STORE", err);
+});
+
 
 const sessionOptions={
-    //  store,
+     store,
     secret:secret,
     resave:false,
     saveUninitialized:true,
@@ -92,6 +93,8 @@ app.use("/",userRouter);
 app.use((req, res, next) => {
     next(new ExpressError(404, "Page Not Found"));
 });
+
+
 
 app.use((err,req,res,next)=>{
     let{statusCode=500,message="Something went wrong"}=err;
